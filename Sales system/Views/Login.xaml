@@ -11,7 +11,7 @@
     <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
         <StackPanel Margin="240,50,240,0" >
             <TextBlock Text="Login" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" />
-            <Image HorizontalAlignment="Stretch" Height="100" Margin="0,0,0,0" VerticalAlignment="Stretch" Source="/Assets/Fingerprint-bro.svg"/>
+            <Image HorizontalAlignment="Stretch" Height="100" Margin="0,40,0,40" VerticalAlignment="Stretch" Source="/Assets/Fingerprint-bro.svg"/>
             <StackPanel Margin="0,0,0,0" >
                 <TextBox Name="Email" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          InputScope="EmailSmtpAddress" PlaceholderText="Email" />
