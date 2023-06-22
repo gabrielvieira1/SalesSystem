@@ -21,7 +21,7 @@ namespace Connection
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      base.OnConfiguring(optionsBuilder.UseSqlite($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"));
+      base.OnConfiguring(optionsBuilder.UseSqlite($"Data Source={ApplicationData.Current.LocalFolder.Path}/Sales_System"));
     }
 
   }
