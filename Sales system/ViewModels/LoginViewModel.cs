@@ -10,6 +10,9 @@ using Windows.UI.Xaml;
 using Sales_system.Library;
 using Connection;
 using Models;
+using System.Diagnostics;
+using Sales_system.Views;
+using Sales_system.Services;
 
 namespace Sales_system.ViewModels
 {
@@ -21,6 +24,7 @@ namespace Sales_system.ViewModels
     private string date = DateTime.Now.ToString("dd/MM/yyy");
     private Frame rootFrame = Window.Current.Content as Frame;
     private Connections _conn;
+
     public LoginViewModel(object[] campos)
     {
       _textBoxEmail = (TextBox)campos[0];
@@ -34,13 +38,15 @@ namespace Sales_system.ViewModels
       {
         return _command ?? (_command = new CommandHandler(async () =>
         {
-          await IniciarAsync();
+            await IniciarAsync();
         }));
       }
     }
 
     private async Task IniciarAsync()
     {
+      int userId = 0;
+
       if (string.IsNullOrEmpty(Email))
       {
         EmailMessage = "Ingresse el email";
@@ -58,15 +64,32 @@ namespace Sales_system.ViewModels
           else
           {
             DataBaseUsers dataBaseUsers = new DataBaseUsers();
-            await dataBaseUsers.CreateDataBase();
 
-            User user = new User()
-            {
-              Email = Email,
-              Password = Password,
-              Name = "Gabriel"
+            User user = new User() { 
+                Email = Email,
+                Password = Password
             };
-            await dataBaseUsers.AddUser(user);
+
+            userId = dataBaseUsers.LoginUserExists(user);
+
+            if (userId != -1)
+            {
+              GeneralMessage = "Usuario logado correctamente.";
+              user = dataBaseUsers.GetUserById(userId);
+
+              Helpers.RaiseUserLoggedIn(user.Name, user.Id);
+              
+
+            }
+            else
+            {
+              GeneralMessage = "Usuario no encontrado.";
+              GeneralTextColor = "#FFC43131";
+            }
+
+            /* adicionar verificação com valores do banco de dados */
+
+
           }
         }
         else

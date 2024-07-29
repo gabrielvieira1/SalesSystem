@@ -1,10 +1,10 @@
 ﻿using Sales_system.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -15,26 +15,25 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Sales_system.Views
-{ 
-    public sealed partial class Login : Page
+{
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class Signup : Page
     {
-        public Login()
+        public Signup()
         {
             InitializeComponent();
-            Object[] campos = { Email, Password };
-            DataContext = new LoginViewModel(campos);
-        }
-
-        private void SuccessfulLogin(object sender, RoutedEventArgs e)
-        {
-          Frame.Navigate(typeof(Welcome));
+            Object[] campos = { Name, Email, Password, ConfirmPassword };
+            DataContext = new SignupViewModel(campos);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(Signup));
+            Frame.Navigate(typeof(Login));
         }
     }
 }
