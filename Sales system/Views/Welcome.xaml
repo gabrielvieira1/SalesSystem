@@ -10,7 +10,10 @@
     
     <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
         <StackPanel Margin="240,50,240,0">
-            <TextBlock Text="{Binding WelcomeMessage, Mode=TwoWay}"  TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
+            <TextBlock Text="Home"  TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
+            <TextBlock x:Name="WelcomeTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
+            <Button Content="Sign-Out" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_Click"/>
+
         </StackPanel>
     </Grid>
 </Page>

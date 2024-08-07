@@ -30,7 +30,6 @@ namespace Connection
     {
             var sql = "SELECT * FROM Users WHERE email=@email";
 
-            Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
             var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
             conn.Open();
 

@@ -36,7 +36,6 @@
             </StackPanel>
             <Button Content="Iniciar" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
-            <Button Content="Ir para login" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_Click"/>
             <TextBlock Text="@BIEL" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Stretch" />
             
         </StackPanel>

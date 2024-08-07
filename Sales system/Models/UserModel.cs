@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace Sales_system.Models
 {
@@ -96,5 +97,6 @@ namespace Sales_system.Models
             get { return GetValue(() => WelcomeMessage);}
             set { SetValue(() => WelcomeMessage, value);}
         }
+
     }
 }

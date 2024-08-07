@@ -1,4 +1,5 @@
-﻿using Sales_system.ViewModels;
+﻿using Models;
+using Sales_system.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,24 +18,30 @@ using Windows.UI.Xaml.Navigation;
 
 
 namespace Sales_system.Views
-{ 
-    public sealed partial class Login : Page
+{
+  public sealed partial class Login : Page
+  {
+    public Login()
     {
-        public Login()
-        {
-            InitializeComponent();
-            Object[] campos = { Email, Password };
-            DataContext = new LoginViewModel(campos);
-        }
-
-        private void SuccessfulLogin(object sender, RoutedEventArgs e)
-        {
-          Frame.Navigate(typeof(Welcome));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(Signup));
-        }
+      InitializeComponent();
+      Object[] campos = { Email, Password };
+      DataContext = new LoginViewModel(campos);
     }
+
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      Frame.Navigate(typeof(Signup));
+    }
+
+    /*protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+      base.OnNavigatedTo(e);
+
+      if (e.Parameter is User user)
+      {
+
+      }
+    }*/
+  }
 }

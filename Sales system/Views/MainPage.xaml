@@ -9,6 +9,15 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <!-- <Button Content="Back" x:Name="GoBackButton" Click="GoBackButton_Click"/>-->
+            <Button Content="Signup" Click="Button_Click"/>
+            <Button Content="Signin" Click="Button_Click_2"/>
+        </StackPanel>
+        <Frame Grid.Column="1" x:Name="InnerFrame" />
     </Grid>
 </Page>

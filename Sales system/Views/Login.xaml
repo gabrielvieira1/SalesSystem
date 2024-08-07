@@ -25,7 +25,6 @@
             </StackPanel>
             <Button Content="Iniciar" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock Text="{Binding Message, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
-            <Button Content="Registrar nova conta" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_Click"/>
             <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
         </StackPanel>
     </Grid>

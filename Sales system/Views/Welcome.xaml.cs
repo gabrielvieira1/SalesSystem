@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Models;
+using Sales_system.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -17,14 +20,32 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Sales_system.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class Welcome : Page
+  /// <summary>
+  /// An empty page that can be used on its own or navigated to within a Frame.
+  /// </summary>
+  public sealed partial class Welcome : Page
+  {
+
+    public Welcome()
     {
-        public Welcome()
-        {
-            this.InitializeComponent();
-        }
+      this.InitializeComponent();
     }
+
+
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+      base.OnNavigatedTo(e);
+
+
+      if (e.Parameter is User user)
+      {
+        WelcomeTextBlock.Text = "Bem vindo, " + user.Name.ToString();
+      }
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+      Frame.Navigate(typeof(MainPage));
+    }
+  }
 }

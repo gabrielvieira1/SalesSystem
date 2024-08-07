@@ -13,6 +13,7 @@ using Models;
 using System.Diagnostics;
 using Sales_system.Views;
 using Sales_system.Services;
+using static LinqToDB.Common.Configuration;
 
 namespace Sales_system.ViewModels
 {
@@ -38,7 +39,7 @@ namespace Sales_system.ViewModels
       {
         return _command ?? (_command = new CommandHandler(async () =>
         {
-            await IniciarAsync();
+          await IniciarAsync();
         }));
       }
     }
@@ -65,9 +66,10 @@ namespace Sales_system.ViewModels
           {
             DataBaseUsers dataBaseUsers = new DataBaseUsers();
 
-            User user = new User() { 
-                Email = Email,
-                Password = Password
+            User user = new User()
+            {
+              Email = Email,
+              Password = Password
             };
 
             userId = dataBaseUsers.LoginUserExists(user);
@@ -76,20 +78,14 @@ namespace Sales_system.ViewModels
             {
               GeneralMessage = "Usuario logado correctamente.";
               user = dataBaseUsers.GetUserById(userId);
-
-              Helpers.RaiseUserLoggedIn(user.Name, user.Id);
-              
-
+              /*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*/
+              ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
             }
             else
             {
               GeneralMessage = "Usuario no encontrado.";
               GeneralTextColor = "#FFC43131";
             }
-
-            /* adicionar verificação com valores do banco de dados */
-
-
           }
         }
         else
