@@ -123,17 +123,32 @@
     <Compile Include="Library\CommandHandler.cs" />
     <Compile Include="Models\PropertyChangedNotification.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Services\Helpers.cs" />
+    <Compile Include="Util\AuthorizeTokenResultVO.cs" />
+    <Compile Include="Util\Constants.cs" />
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\MetaDataManager.cs" />
+    <Compile Include="Util\SAManager.cs" />
+    <Compile Include="Util\StateGenerator.cs" />
+    <Compile Include="Util\StaticConstants.cs" />
+    <Compile Include="Util\Storage.cs" />
+    <Compile Include="Util\Utils.cs" />
+    <Compile Include="ViewModels\GetAccessTokenViewModel.cs" />
+    <Compile Include="ViewModels\RestrictedViewModel.cs" />
+    <Compile Include="ViewModels\SALoginViewModel.cs" />
+    <Compile Include="ViewModels\SASignoutViewModel.cs" />
     <Compile Include="ViewModels\SignupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WelcomeViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Restricted.xaml.cs">
+      <DependentUpon>Restricted.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Signup.xaml.cs">
       <DependentUpon>Signup.xaml</DependentUpon>
     </Compile>
@@ -206,22 +221,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\Login.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Signup.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Welcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="linq2db">
@@ -239,6 +238,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Connection\Connection.csproj">
@@ -250,7 +252,38 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Views\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Restricted.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Signup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Welcome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SASample_TemporaryKey.pfx" />
+    <None Include="Storekey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SamsungAccountLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\SamsungAccountLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

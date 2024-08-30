@@ -11,11 +11,9 @@ using Sales_system.Library;
 using Connection;
 using Models;
 using System.Diagnostics;
-using Sales_system.Views;
-using Sales_system.Services;
 using Windows.System;
 
-namespace Sales_system.ViewModels
+namespace Sales_system
 {
   internal class WelcomeViewModel : UserModel
   {

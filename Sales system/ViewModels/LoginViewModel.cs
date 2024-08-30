@@ -11,11 +11,13 @@ using Sales_system.Library;
 using Connection;
 using Models;
 using System.Diagnostics;
-using Sales_system.Views;
-using Sales_system.Services;
 using static LinqToDB.Common.Configuration;
+using System.ComponentModel.DataAnnotations;
+using Sales_system.Util;
+using SamsungAccountLibrary.SARequest;
+using SamsungAccountLibrary;
 
-namespace Sales_system.ViewModels
+namespace Sales_system
 {
   public class LoginViewModel : UserModel
   {
@@ -44,54 +46,64 @@ namespace Sales_system.ViewModels
       }
     }
 
-    private async Task IniciarAsync()
+    private bool isValidCredentials(string email, string password)
     {
-      int userId = 0;
-
-      if (string.IsNullOrEmpty(Email))
+      if (string.IsNullOrEmpty(email))
       {
         EmailMessage = "Ingresse el email";
         _textBoxEmail.Focus(FocusState.Programmatic);
       }
       else
       {
-        if (TextBoxEvent.IsValidEmail(Email))
+        if (TextBoxEvent.IsValidEmail(email))
         {
-          if (string.IsNullOrEmpty(Password))
+          if (string.IsNullOrEmpty(password))
           {
             PasswordMessage = "Ingrese el password";
             _textBoxPass.Focus(FocusState.Programmatic);
           }
           else
           {
-            DataBaseUsers dataBaseUsers = new DataBaseUsers();
-
-            User user = new User()
-            {
-              Email = Email,
-              Password = Password
-            };
-
-            userId = dataBaseUsers.LoginUserExists(user);
-
-            if (userId != -1)
-            {
-              GeneralMessage = "Usuario logado correctamente.";
-              user = dataBaseUsers.GetUserById(userId);
-              /*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*/
-              ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
-            }
-            else
-            {
-              GeneralMessage = "Usuario no encontrado.";
-              GeneralTextColor = "#FFC43131";
-            }
+            return true;
           }
         }
         else
         {
           EmailMessage = "El email no es valido";
           _textBoxEmail.Focus(FocusState.Programmatic);
+        }
+      }
+
+      return false;
+    }
+
+    private async Task IniciarAsync()
+    {
+      if (isValidCredentials(Email, Password))
+      {
+        DataBaseUsers dataBaseUsers = new DataBaseUsers();
+
+        await dataBaseUsers.CreateDataBase();
+
+        User user = new User()
+        {
+          Email = Email,
+          Password = Password
+        };
+
+        if (dataBaseUsers.DoesUserExists(user))
+        {
+          GeneralMessage = "Usuario logado correctamente.";
+          //*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*//*
+          Debug.WriteLine("user name - ", user.Name);
+
+          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
+        }
+        else
+        {
+          GeneralMessage = "Usuario no encontrado.";
+          GeneralTextColor = "#FFC43131";
+
         }
       }
     }

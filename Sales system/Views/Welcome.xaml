@@ -1,19 +1,20 @@
 ﻿<Page
-    x:Class="Sales_system.Views.Welcome"
+    x:Class="Sales_system.Welcome"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sales_system.Views"
+    xmlns:local="using:Sales_system"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
+
     <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
         <StackPanel Margin="240,50,240,0">
             <TextBlock Text="Home"  TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
             <TextBlock x:Name="WelcomeTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold"/>
             <Button Content="Sign-Out" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Button_Click"/>
-
+            <Button Content="Access content" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="Button_Click_1"/>
+            <Button Content="Get access token" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessToken_Click"/>
         </StackPanel>
     </Grid>
 </Page>

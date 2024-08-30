@@ -11,9 +11,8 @@ using Windows.UI.Xaml;
 using Sales_system.Library;
 using Models;
 using System.Diagnostics;
-using Sales_system.Views;
 
-namespace Sales_system.ViewModels
+namespace Sales_system
 {
   internal class SignupViewModel : UserModel
   {
@@ -46,8 +45,7 @@ namespace Sales_system.ViewModels
       }
     }
 
-
-    private async Task IniciarAsync()
+    private bool isValidCredentials(string email, string password)
     {
       if (string.IsNullOrEmpty(Name))
       {
@@ -92,30 +90,44 @@ namespace Sales_system.ViewModels
                 }
                 else
                 {
-                  DataBaseUsers dataBaseUsers = new DataBaseUsers();
-
-                  User user = new User()
-                  {
-                    Email = Email,
-                    Password = Password,
-                    Name = Name
-                  };
-
-                  if (dataBaseUsers.DoesUserExists(user))
-                  {
-                    GeneralMessage = "El usuario ya existe";
-                    GeneralTextColor = "#FFC43131";
-                  }
-                  else
-                  {
-                    await dataBaseUsers.CreateDataBase();
-                    await dataBaseUsers.AddUser(user);
-                    ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
-                  }
+                  return true;
                 }
               }
             }
           }
+        }
+      }
+
+      return false;
+    }
+
+    private async Task IniciarAsync()
+    {
+
+      if (isValidCredentials(Email, Password))
+      {
+        DataBaseUsers dataBaseUsers = new DataBaseUsers();
+
+        await dataBaseUsers.CreateDataBase();
+
+        User user = new User()
+        {
+          Email = Email,
+          Password = Password
+        };
+
+        if (dataBaseUsers.DoesUserExists(user))
+        {
+          GeneralMessage = "El usuario ya existe";
+          GeneralTextColor = "#FFC43131";
+        }
+        else
+        {
+          user.Name = Name;
+          Debug.WriteLine("registered name - ", user.Name);
+          await dataBaseUsers.AddUser(user);
+          ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+
         }
       }
     }

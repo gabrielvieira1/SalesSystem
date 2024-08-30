@@ -1,7 +1,5 @@
-﻿using Sales_system.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -16,8 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Sales_system
 {
@@ -38,7 +35,7 @@ namespace Sales_system
       {
         e.Handled = true;
         InnerFrame.GoBack();
-       /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
+        /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
         SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
       }
     }
@@ -54,14 +51,14 @@ namespace Sales_system
     private void GoBackButton_Click(object sender, RoutedEventArgs e)
     {
       InnerFrame.GoBack();
-     /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
+      /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
       SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
     }
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
       InnerFrame.Navigate(typeof(Signup));
-     /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
+      /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
       SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
     }
 

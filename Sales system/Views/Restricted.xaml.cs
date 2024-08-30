@@ -1,10 +1,8 @@
-﻿using Sales_system.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,18 +20,11 @@ namespace Sales_system
   /// <summary>
   /// An empty page that can be used on its own or navigated to within a Frame.
   /// </summary>
-  public sealed partial class Signup : Page
+  public sealed partial class Restricted : Page
   {
-    public Signup()
+    public Restricted()
     {
-      InitializeComponent();
-      Object[] campos = { Name, Email, Password, ConfirmPassword };
-      DataContext = new SignupViewModel(campos);
-    }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-      Frame.Navigate(typeof(Login));
+      this.InitializeComponent();
     }
   }
 }
