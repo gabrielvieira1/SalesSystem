@@ -45,10 +45,23 @@
         </uap:DefaultTile >
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.appService">
+          <uap:AppService Name="com.samsung.sso"/>
+        </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="com.salessystem"/>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
 
   <Capabilities>
     <Capability Name="internetClient" />
+						<Capability Name="privateNetworkClientServer" />
+						<Capability Name="internetClientServer" />
+						<uap:Capability Name="sharedUserCertificates" />
+						<uap:Capability Name="userAccountInformation" />
+						<uap:Capability Name="enterpriseAuthentication" />
   </Capabilities>
 </Package>

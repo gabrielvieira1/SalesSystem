@@ -121,9 +121,16 @@
     </Compile>
     <Compile Include="Library\TextBoxEvent.cs" />
     <Compile Include="Library\CommandHandler.cs" />
+    <Compile Include="Models\MetaDataManager.cs" />
     <Compile Include="Models\PropertyChangedNotification.cs" />
+    <Compile Include="Models\StorageSA.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Services\Helpers.cs" />
+    <Compile Include="Util\Constants.cs" />
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\StateGenerator.cs" />
+    <Compile Include="Util\Utils.cs" />
+    <Compile Include="ViewModels\SALoginViewModel.cs" />
     <Compile Include="ViewModels\SignupViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WelcomeViewModel.cs" />
@@ -193,6 +200,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="DLLs\SamsungAccountLibrary.dll" />
+    <Content Include="DLLs\SamsungAccountLibrary.pdb" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -250,7 +259,15 @@
       <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="DLLs\SamsungAccountLibrary.pri" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SamsungAccountLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\SamsungAccountLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

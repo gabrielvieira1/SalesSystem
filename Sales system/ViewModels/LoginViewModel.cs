@@ -46,46 +46,54 @@ namespace Sales_system.ViewModels
 
     private async Task IniciarAsync()
     {
-      int userId = 0;
+      if (isValidCredentials(Email, Password))
+      {
+        DataBaseUsers dataBaseUsers = new DataBaseUsers();
 
-      if (string.IsNullOrEmpty(Email))
+        await dataBaseUsers.CreateDataBase();
+
+        User user = new User()
+        {
+          Email = Email,
+          Password = Password
+        };
+
+        if (dataBaseUsers.DoesUserExists(user))
+        {
+          GeneralMessage = "Usuario logado correctamente.";
+          //*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*//*
+          Debug.WriteLine("user name - ", user.Name);
+
+          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
+        }
+        else
+        {
+          GeneralMessage = "Usuario no encontrado.";
+          GeneralTextColor = "#FFC43131";
+
+        }
+      }
+    }
+
+    private bool isValidCredentials(string email, string password)
+    {
+      if (string.IsNullOrEmpty(email))
       {
         EmailMessage = "Ingresse el email";
         _textBoxEmail.Focus(FocusState.Programmatic);
       }
       else
       {
-        if (TextBoxEvent.IsValidEmail(Email))
+        if (TextBoxEvent.IsValidEmail(email))
         {
-          if (string.IsNullOrEmpty(Password))
+          if (string.IsNullOrEmpty(password))
           {
             PasswordMessage = "Ingrese el password";
             _textBoxPass.Focus(FocusState.Programmatic);
           }
           else
           {
-            DataBaseUsers dataBaseUsers = new DataBaseUsers();
-
-            User user = new User()
-            {
-              Email = Email,
-              Password = Password
-            };
-
-            userId = dataBaseUsers.LoginUserExists(user);
-
-            if (userId != -1)
-            {
-              GeneralMessage = "Usuario logado correctamente.";
-              user = dataBaseUsers.GetUserById(userId);
-              /*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*/
-              ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
-            }
-            else
-            {
-              GeneralMessage = "Usuario no encontrado.";
-              GeneralTextColor = "#FFC43131";
-            }
+            return true;
           }
         }
         else
@@ -94,6 +102,8 @@ namespace Sales_system.ViewModels
           _textBoxEmail.Focus(FocusState.Programmatic);
         }
       }
+
+      return false;
     }
   }
 }

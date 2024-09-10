@@ -43,9 +43,16 @@ namespace Sales_system.Views
       }
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private void SignOut_Click(object sender, RoutedEventArgs e)
     {
-      Frame.Navigate(typeof(MainPage));
+      var sALoginViewModel = new SALoginViewModel();
+      sALoginViewModel.SignOutCommand.Execute(null);
+    }
+
+    private void GetAccessToken_Click(object sender, RoutedEventArgs e)
+    {
+      var sALoginViewModel = new SALoginViewModel();
+      sALoginViewModel.GetAccessTokenCommand.Execute(null);
     }
   }
 }
