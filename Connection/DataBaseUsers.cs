@@ -7,11 +7,11 @@ using Windows.Storage;
 
 namespace Connection
 {
-    public class DataBaseUsers
+  public class DataBaseUsers
   {
     public async Task CreateDataBase()
     {
-      using(var conn = new Connections())
+      using (var conn = new Connections())
       {
         await conn.Database.EnsureCreatedAsync();
       }
@@ -19,7 +19,7 @@ namespace Connection
 
     public async Task AddUser(Models.User user)
     {
-      using(var conn = new Connections())
+      using (var conn = new Connections())
       {
         conn.Users.Add(user);
         await conn.SaveChangesAsync();
@@ -28,24 +28,24 @@ namespace Connection
 
     public Boolean DoesUserExists(Models.User user)
     {
-            var sql = "SELECT * FROM Users WHERE email=@email";
+      var sql = "SELECT * FROM Users WHERE email=@email";
 
-            var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
-            conn.Open();
+      var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
+      conn.Open();
 
-            var command = new SqliteCommand(sql, conn);
-            command.Parameters.AddWithValue("@email", user.Email);
+      var command = new SqliteCommand(sql, conn);
+      command.Parameters.AddWithValue("@email", user.Email);
 
-            var reader = command.ExecuteReader();
+      var reader = command.ExecuteReader();
 
-            if (reader.HasRows)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+      if (reader.HasRows)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
 
     public int LoginUserExists(Models.User user)
@@ -70,7 +70,7 @@ namespace Connection
           id = reader.GetInt32(0);
         }
 
-       return id;
+        return id;
 
       }
       else
@@ -83,31 +83,36 @@ namespace Connection
 
     public Models.User GetUserById(int id)
     {
-        var sql = "SELECT * FROM Users WHERE id=@id";
+      var sql = "SELECT id, name, email FROM Users WHERE id=@id";
 
-        var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
+      {
         conn.Open();
 
-        var command = new SqliteCommand(sql, conn);
-        command.Parameters.AddWithValue("@id", id);
-
-        var reader = command.ExecuteReader();
-        Models.User user = new Models.User();
-
-
-        if (reader.HasRows)
+        using (var command = new SqliteCommand(sql, conn))
         {
-            while (reader.Read())
+          command.Parameters.AddWithValue("@id", id);
+
+          using (var reader = command.ExecuteReader())
+          {
+            if (reader.HasRows)
             {
+              Models.User user = new Models.User();
+
+              while (reader.Read())
+              {
                 user.Id = reader.GetInt32(0);
                 user.Name = reader.GetString(1);
+                user.Email = reader.GetString(2);
+              }
+
+              return user;
             }
-
+          }
         }
+      }
 
-
-        return user;
-
+      return null;
     }
-    }
+  }
 }

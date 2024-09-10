@@ -19,7 +19,6 @@ namespace Sales_system.ViewModels
 {
   public class LoginViewModel : UserModel
   {
-    private ICommand _command;
     private TextBox _textBoxEmail;
     private PasswordBox _textBoxPass;
     private string date = DateTime.Now.ToString("dd/MM/yyy");
@@ -33,18 +32,20 @@ namespace Sales_system.ViewModels
       _conn = new Connections();
     }
 
-    public ICommand IniciarCommand
+    private ICommand _signInCommand;
+
+    public ICommand SignInCommand
     {
       get
       {
-        return _command ?? (_command = new CommandHandler(async () =>
+        return _signInCommand ?? (_signInCommand = new CommandHandler(async () =>
         {
-          await IniciarAsync();
+          await SignIn();
         }));
       }
     }
 
-    private async Task IniciarAsync()
+    private async Task SignIn()
     {
       if (isValidCredentials(Email, Password))
       {
@@ -60,17 +61,29 @@ namespace Sales_system.ViewModels
 
         if (dataBaseUsers.DoesUserExists(user))
         {
-          GeneralMessage = "Usuario logado correctamente.";
-          //*((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);*//*
-          Debug.WriteLine("user name - ", user.Name);
+          int userId = dataBaseUsers.LoginUserExists(user);
 
-          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
+          if (userId > 0)
+          {
+            User loggedUser = dataBaseUsers.GetUserById(userId);
+
+            GeneralMessage = "User logged in successfully.";
+            GeneralTextColor = "#FF00FF00";
+
+            Debug.WriteLine("Logged in user: " + loggedUser.Name);
+
+            ((Frame)Window.Current.Content).Navigate(typeof(Welcome), loggedUser);
+          }
+          else
+          {
+            GeneralMessage = "Invalid credentials. Please check your email and password.";
+            GeneralTextColor = "#FFC43131";
+          }
         }
         else
         {
-          GeneralMessage = "Usuario no encontrado.";
+          GeneralMessage = "User not found.";
           GeneralTextColor = "#FFC43131";
-
         }
       }
     }
@@ -79,7 +92,7 @@ namespace Sales_system.ViewModels
     {
       if (string.IsNullOrEmpty(email))
       {
-        EmailMessage = "Ingresse el email";
+        EmailMessage = "Please enter your email.";
         _textBoxEmail.Focus(FocusState.Programmatic);
       }
       else
@@ -88,7 +101,7 @@ namespace Sales_system.ViewModels
         {
           if (string.IsNullOrEmpty(password))
           {
-            PasswordMessage = "Ingrese el password";
+            PasswordMessage = "Please enter your password.";
             _textBoxPass.Focus(FocusState.Programmatic);
           }
           else
@@ -98,7 +111,7 @@ namespace Sales_system.ViewModels
         }
         else
         {
-          EmailMessage = "El email no es valido";
+          EmailMessage = "The email entered is not valid.";
           _textBoxEmail.Focus(FocusState.Programmatic);
         }
       }

@@ -23,13 +23,6 @@ namespace Sales_system
 {
   public sealed partial class Login : Page
   {
-    public static String state = null;
-    public static String code_verifier = null;
-    private static String TEST_CLIENT_ID = "5z959u0k0k";
-    private static String TEST_CLIENT_SECRET = "731DC767CFAF351549E8C269ABFC747D";
-    private string accountServerType;
-    private static readonly int RANDOM_STRING_LENGTH = 32;
-
     public Login()
     {
       InitializeComponent();
@@ -37,17 +30,11 @@ namespace Sales_system
       DataContext = new LoginViewModel(campos);
     }
 
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-      Frame.Navigate(typeof(Signup));
-    }
-
     private void LoginWithSA_Click(object sender, RoutedEventArgs e)
     {
       InitializeComponent();
       SALoginViewModel salogin = new SALoginViewModel();
-      salogin.SignInCommand.Execute(null);
+      salogin.SignInSACommand.Execute(null);
     }
   }
 }

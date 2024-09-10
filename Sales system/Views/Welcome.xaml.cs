@@ -36,17 +36,16 @@ namespace Sales_system.Views
     {
       base.OnNavigatedTo(e);
 
-
       if (e.Parameter is User user)
       {
-        WelcomeTextBlock.Text = "Bem vindo, " + user.Name.ToString();
+        WelcomeTextBlock.Text = "Bem vindo, " + user.Name;
       }
     }
 
     private void SignOut_Click(object sender, RoutedEventArgs e)
     {
       var sALoginViewModel = new SALoginViewModel();
-      sALoginViewModel.SignOutCommand.Execute(null);
+      sALoginViewModel.SignOutSACommand.Execute(null);
     }
 
     private void GetAccessToken_Click(object sender, RoutedEventArgs e)

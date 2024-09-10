@@ -34,7 +34,7 @@
                 <TextBlock Foreground="#FFC43131" Text="{Binding ConfirmPasswordMessage, Mode=TwoWay}"
                 TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontStyle="Normal"/>
             </StackPanel>
-            <Button Content="Iniciar" Command="{Binding IniciarCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button Content="Sign Up" Command="{Binding SignUpCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
             <TextBlock Text="@BIEL" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Stretch" />
             

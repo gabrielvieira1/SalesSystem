@@ -17,7 +17,6 @@ namespace Sales_system.ViewModels
 {
   internal class SignupViewModel : UserModel
   {
-    private ICommand _command;
     private TextBox _textBoxName;
     private TextBox _textBoxEmail;
     private PasswordBox _textBoxPass;
@@ -35,20 +34,21 @@ namespace Sales_system.ViewModels
       _conn = new Connections();
     }
 
-    public ICommand IniciarCommand
+    private ICommand _signUpcommand;
+
+    public ICommand SignUpCommand
     {
       get
       {
-        return _command ?? (_command = new CommandHandler(async () =>
+        return _signUpcommand ?? (_signUpcommand = new CommandHandler(async () =>
         {
-          await IniciarAsync();
+          await SignUp();
         }));
       }
     }
 
-    private async Task IniciarAsync()
+    private async Task SignUp()
     {
-
       if (isValidCredentials(Email, Password))
       {
         DataBaseUsers dataBaseUsers = new DataBaseUsers();

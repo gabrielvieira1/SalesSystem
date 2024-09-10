@@ -46,25 +46,25 @@ namespace Sales_system.ViewModels
       }
     }
 
-    private ICommand _signOutCommand;
-    public ICommand SignOutCommand
+    private ICommand _signOutSACommand;
+    public ICommand SignOutSACommand
     {
 
       get
       {
-        return _signOutCommand ?? (_signOutCommand = new CommandHandler(() =>
+        return _signOutSACommand ?? (_signOutSACommand = new CommandHandler(() =>
         {
           SignOut_click();
         }));
       }
     }
 
-    private ICommand _signInCommand;
-    public ICommand SignInCommand
+    private ICommand _signInSACommand;
+    public ICommand SignInSACommand
     {
       get
       {
-        return _signInCommand ?? (_signInCommand = new CommandHandler( () =>
+        return _signInSACommand ?? (_signInSACommand = new CommandHandler( () =>
         {
           SignIn_click();
         }));
