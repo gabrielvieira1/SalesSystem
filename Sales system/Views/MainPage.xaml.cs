@@ -1,4 +1,5 @@
-﻿using Sales_system.Views;
+﻿using Sales_system.ViewModels;
+using Sales_system.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,7 +47,14 @@ namespace Sales_system
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
       base.OnNavigatedTo(e);
-      InnerFrame.Navigate(typeof(Login));
+      if (!StorageSA.GetSignedStatus())
+      {
+        InnerFrame.Navigate(typeof(Login));
+      }
+      else
+      {
+        InnerFrame.Navigate(typeof(Welcome));
+      }
       /*this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
       SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
     }

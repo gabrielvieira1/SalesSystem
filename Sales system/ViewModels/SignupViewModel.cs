@@ -57,22 +57,27 @@ namespace Sales_system.ViewModels
 
         User user = new User()
         {
+          Name = Name,
           Email = Email,
-          Password = Password
+          Password = Password,
+          AccessToken = Guid.NewGuid().ToString(),
+          AccessTokenExpires = DateTime.UtcNow.AddDays(1).ToString("o"),
+          Active = true
         };
+
 
         if (dataBaseUsers.DoesUserExists(user))
         {
-          GeneralMessage = "El usuario ya existe";
+          GeneralMessage = "The user already exists.";
           GeneralTextColor = "#FFC43131";
         }
         else
         {
-          user.Name = Name;
-          Debug.WriteLine("registered name - ", user.Name);
           await dataBaseUsers.AddUser(user);
-          ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
-
+          MetaDataManager.GetInstance().SetAccessToken(user.AccessToken);
+          MetaDataManager.GetInstance().SetSignedInStatus(true);
+          StorageSA.saveData();
+          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
         }
       }
     }

@@ -14,6 +14,7 @@ using System.Diagnostics;
 using Sales_system.Views;
 using Sales_system.Services;
 using static LinqToDB.Common.Configuration;
+using Windows.Foundation.Collections;
 
 namespace Sales_system.ViewModels
 {
@@ -25,10 +26,10 @@ namespace Sales_system.ViewModels
     private Frame rootFrame = Window.Current.Content as Frame;
     private Connections _conn;
 
-    public LoginViewModel(object[] campos)
+    public LoginViewModel()
     {
-      _textBoxEmail = (TextBox)campos[0];
-      _textBoxPass = (PasswordBox)campos[1];
+      //_textBoxEmail = (TextBox)campos[0];
+      //_textBoxPass = (PasswordBox)campos[1];
       _conn = new Connections();
     }
 
@@ -69,8 +70,6 @@ namespace Sales_system.ViewModels
 
             GeneralMessage = "User logged in successfully.";
             GeneralTextColor = "#FF00FF00";
-
-            Debug.WriteLine("Logged in user: " + loggedUser.Name);
 
             ((Frame)Window.Current.Content).Navigate(typeof(Welcome), loggedUser);
           }

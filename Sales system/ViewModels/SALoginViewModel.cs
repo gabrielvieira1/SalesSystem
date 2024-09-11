@@ -47,6 +47,18 @@ namespace Sales_system.ViewModels
       }
     }
 
+    private ICommand _getAccessTokenLocalCommand;
+    public ICommand GetAccessTokenLocalCommand
+    {
+      get
+      {
+        return _getAccessTokenLocalCommand ?? (_getAccessTokenLocalCommand = new CommandHandler(() =>
+        {
+          CheckIfUserIsLoggedIn();
+        }));
+      }
+    }
+
     private ICommand _signOutSACommand;
     public ICommand SignOutSACommand
     {
@@ -390,9 +402,39 @@ namespace Sales_system.ViewModels
         Email = profileResponse.GetEmailLoginID(),
         AccessToken = accessToken,
         AccessTokenExpires = accessTokenExpires,
+        Active = true
       };
 
       await dataBaseUsers.AddUser(user);
+      StorageSA.saveData();
+    }
+
+    private void CheckIfUserIsLoggedIn()
+    {
+
+      var status = StorageSA.GetSignedStatus();
+
+      // Recupera os dados salvos, incluindo o AccessToken
+      ValueSet savedData = StorageSA.readData();
+
+      if (savedData != null && savedData.ContainsKey("access_token"))
+      {
+        string accessToken = savedData["access_token"].ToString();
+
+        // Se o access_token existir e não estiver vazio, considerar o usuário logado
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+          // Buscar o userId armazenado
+          int userId = int.Parse(savedData["userId"].ToString());
+
+          DataBaseUsers dataBaseUsers = new DataBaseUsers();
+          User loggedUser = dataBaseUsers.GetUserById(userId);
+
+          // Redireciona o usuário logado para a tela de Welcome
+          Debug.WriteLine("User already logged in: " + loggedUser.Name);
+          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), loggedUser);
+        }
+      }
     }
 
     String ProcessGetProfileResponse(IResponse response)

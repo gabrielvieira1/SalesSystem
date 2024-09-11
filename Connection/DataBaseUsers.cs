@@ -83,7 +83,7 @@ namespace Connection
 
     public Models.User GetUserById(int id)
     {
-      var sql = "SELECT id, name, email FROM Users WHERE id=@id";
+      var sql = "SELECT id, name, email, AccessToken, AccessTokenExpires, CreatedDateTime, Active FROM Users WHERE id=@id";
 
       using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
       {
@@ -92,6 +92,44 @@ namespace Connection
         using (var command = new SqliteCommand(sql, conn))
         {
           command.Parameters.AddWithValue("@id", id);
+
+          using (var reader = command.ExecuteReader())
+          {
+            if (reader.HasRows)
+            {
+              Models.User user = new Models.User();
+
+              while (reader.Read())
+              {
+                user.Id = reader.GetInt32(0);
+                user.Name = reader.GetString(1);
+                user.Email = reader.GetString(2);
+                user.AccessToken = reader.GetString(3);
+                user.AccessTokenExpires = reader.GetString(4);
+                user.CreatedDateTime = reader.GetDateTime(5);
+                user.Active = reader.GetBoolean(6);
+              }
+
+              return user;
+            }
+          }
+        }
+      }
+
+      return null;
+    }
+
+    public Models.User GetUserByAccessToken(string accessToken)
+    {
+      var sql = "SELECT id, name, email FROM Users WHERE AccessToken=@accessToken";
+
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
+      {
+        conn.Open();
+
+        using (var command = new SqliteCommand(sql, conn))
+        {
+          command.Parameters.AddWithValue("@accessToken", accessToken);
 
           using (var reader = command.ExecuteReader())
           {
@@ -113,6 +151,31 @@ namespace Connection
       }
 
       return null;
+    }
+
+    public async Task ClearAccessToken(int userId)
+    {
+      var sql = "UPDATE Users SET AccessToken = NULL, AccessTokenExpires = NULL WHERE id = @id";
+
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
+      {
+        await conn.OpenAsync();
+
+        using (var command = new SqliteCommand(sql, conn))
+        {
+          command.Parameters.AddWithValue("@id", userId);
+
+          try
+          {
+            await command.ExecuteNonQueryAsync();
+            Debug.WriteLine($"AccessToken and AccessTokenExpires cleared for user with ID: {userId}");
+          }
+          catch (Exception ex)
+          {
+            Debug.WriteLine($"Error clearing AccessToken for user {userId}: {ex.Message}");
+          }
+        }
+      }
     }
   }
 }

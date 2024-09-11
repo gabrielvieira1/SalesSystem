@@ -38,7 +38,11 @@ namespace Sales_system.Views
     {
       base.OnNavigatedTo(e);
 
-      if (e.Parameter is User user)
+      WelcomeViewModel welcomeViewModel = new WelcomeViewModel();
+
+      var user = welcomeViewModel.GetInfoUserLoggedIn();
+
+      if (user != null)
       {
         WelcomeTextBlock.Text = "Bem vindo, " + user.Name;
       }
@@ -57,6 +61,11 @@ namespace Sales_system.Views
     private void GetProfileData_Click(object sender, RoutedEventArgs e)
     {
       sALoginViewModel.GetProfileDataCommand.Execute(null);
+    }
+
+    private void GetAccessLocal_Click(object sender, RoutedEventArgs e)
+    {
+      sALoginViewModel.GetAccessTokenLocalCommand.Execute(null);
     }
   }
 }

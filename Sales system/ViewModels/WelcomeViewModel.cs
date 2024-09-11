@@ -14,6 +14,8 @@ using System.Diagnostics;
 using Sales_system.Views;
 using Sales_system.Services;
 using Windows.System;
+using Windows.Foundation.Collections;
+using User = Models.User;
 
 namespace Sales_system.ViewModels
 {
@@ -34,14 +36,27 @@ namespace Sales_system.ViewModels
 
     private async Task IniciarAsync()
     {
-      /*se existir uma sessão, limpar o usuário aqui*/
       ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
 
     }
-    public WelcomeViewModel()
+    public WelcomeViewModel(){}
+
+    public User GetInfoUserLoggedIn()
     {
+      ValueSet savedData = StorageSA.readData();
 
+      if (savedData != null && savedData.ContainsKey("access_token"))
+      {
+        string accessToken = savedData["access_token"].ToString();
+
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+          DataBaseUsers dataBaseUsers = new DataBaseUsers();
+          User loggedUser = dataBaseUsers.GetUserByAccessToken(accessToken);
+          return loggedUser;
+        }
+      }
+      return null;
     }
-
   }
 }
