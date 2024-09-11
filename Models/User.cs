@@ -15,11 +15,12 @@ namespace Models
     public string Name { get; set; }
     [Required]
     public string Email { get; set; }
-    [Required]
     public string Password { get; set; }
+    public string AccessToken { get; set; }
+    public string AccessTokenExpires { get; set; }
     [Required]
     public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
     [Required]
     public bool Active { get; set; }
-    }
+  }
 }

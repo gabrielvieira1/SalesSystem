@@ -13,6 +13,7 @@
             <TextBlock x:Name="WelcomeTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" Margin="0,25,0,50"/>
             <Button Content="Sign-Out" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SignOut_Click"/>
             <Button Content="Get access token" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessToken_Click"/>
+            <Button Content="Get profile data" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetProfileData_Click"/>
 
         </StackPanel>
     </Grid>

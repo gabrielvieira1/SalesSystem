@@ -25,10 +25,12 @@ namespace Sales_system.Views
   /// </summary>
   public sealed partial class Welcome : Page
   {
+    private SALoginViewModel sALoginViewModel = null;
 
     public Welcome()
     {
       this.InitializeComponent();
+      sALoginViewModel = new SALoginViewModel();
     }
 
 
@@ -44,14 +46,17 @@ namespace Sales_system.Views
 
     private void SignOut_Click(object sender, RoutedEventArgs e)
     {
-      var sALoginViewModel = new SALoginViewModel();
       sALoginViewModel.SignOutSACommand.Execute(null);
     }
 
     private void GetAccessToken_Click(object sender, RoutedEventArgs e)
     {
-      var sALoginViewModel = new SALoginViewModel();
       sALoginViewModel.GetAccessTokenCommand.Execute(null);
+    }
+
+    private void GetProfileData_Click(object sender, RoutedEventArgs e)
+    {
+      sALoginViewModel.GetProfileDataCommand.Execute(null);
     }
   }
 }

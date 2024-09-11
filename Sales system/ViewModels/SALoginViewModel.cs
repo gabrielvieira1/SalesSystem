@@ -22,6 +22,7 @@ using SamsungAccountLibrary.SARequest.AccountServerTypeRequest;
 using LinqToDB.Common;
 using Microsoft.VisualBasic;
 using SamsungAccountLibrary.SARequest;
+using System.Xml.Linq;
 
 namespace Sales_system.ViewModels
 {
@@ -41,7 +42,7 @@ namespace Sales_system.ViewModels
       {
         return _getAccessTokenCommand ?? (_getAccessTokenCommand = new CommandHandler(() =>
         {
-          GetAccessToken_Click();
+          GetAccessTokenSA();
         }));
       }
     }
@@ -54,7 +55,7 @@ namespace Sales_system.ViewModels
       {
         return _signOutSACommand ?? (_signOutSACommand = new CommandHandler(() =>
         {
-          SignOut_click();
+          SignOutSA();
         }));
       }
     }
@@ -64,9 +65,21 @@ namespace Sales_system.ViewModels
     {
       get
       {
-        return _signInSACommand ?? (_signInSACommand = new CommandHandler( () =>
+        return _signInSACommand ?? (_signInSACommand = new CommandHandler(() =>
         {
-          SignIn_click();
+          SignInSA();
+        }));
+      }
+    }
+
+    private ICommand _getProfileDataCommand;
+    public ICommand GetProfileDataCommand
+    {
+      get
+      {
+        return _getProfileDataCommand ?? (_getProfileDataCommand = new CommandHandler(() =>
+        {
+          GetProfileDataSA();
         }));
       }
     }
@@ -76,7 +89,7 @@ namespace Sales_system.ViewModels
       SamsungAccountManager.SubscribeLogging();
     }
 
-    private void SignIn_click()
+    private void SignInSA()
     {
       ValueSet signInData = new ValueSet();
 
@@ -95,7 +108,7 @@ namespace Sales_system.ViewModels
       SamsungAccountManager.SignIn(signInDataObj);
     }
 
-    private void SignOut_click()
+    private void SignOutSA()
     {
       state = Util.StateGenerator.GenerateStateValue(RANDOM_STRING_LENGTH);
       ValueSet bundle = new ValueSet();
@@ -108,13 +121,22 @@ namespace Sales_system.ViewModels
       SamsungAccountManager.SignOut(signOutRequest);
     }
 
-    private void GetAccessToken_Click()
+    private void GetAccessTokenSA()
     {
       GetAccessTokenRequest getAccessTokenRequest = new GetAccessTokenRequest();
       getAccessTokenRequest.SetClientId(StaticConstants.clientID);
 
       SamsungAccountManager.GetAccessToken(this, getAccessTokenRequest);
+    }
 
+    private async void GetProfileDataSA()
+    {
+      GetUserProfileRequest request = new GetUserProfileRequest();
+      request.SetClientId(StaticConstants.clientID)
+             .SetUserId(MetaDataManager.GetInstance().GetUserId())
+             .SetAccessToken(MetaDataManager.GetInstance().GetAccessToken());
+      IResponse response = await SamsungAccountManager.GetUserProfileData(request);
+      string result = ProcessGetProfileResponse(response);
     }
 
     public void OnResponseReceived(IResponse response)
@@ -201,6 +223,8 @@ namespace Sales_system.ViewModels
           string sdkState = SamsungAccountManager.Decrypt(signInResponse.GetState(), state);
           MetaDataManager.GetInstance().SetAuthorizationCode(authCode);
           MetaDataManager.GetInstance().SetAuthServerUrl(authServerUrl);
+
+          GetAccessTokenSA();
 
           ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
 
@@ -332,6 +356,9 @@ namespace Sales_system.ViewModels
            $"AccessToken expires in: {accessTokenResponse.GetAccessTokenExpiresIn()}, RefreshToken expires in: {accessTokenResponse.GetRefreshTokenExpiresIn()}, " +
            $"UserId: {accessTokenResponse.GetUserId()}, ServerTime: {accessTokenResponse.GetServerTime()}, " +
            $"AuthServerUrl: {accessTokenResponse.GetAuthServerUrl()}, ApiServerUrl: {accessTokenResponse.GetApiServerUrl()}";
+
+        AddUserSA(accessTokenResponse.GetAccessToken(), accessTokenResponse.GetAccessTokenExpiresIn());
+
       }
       else
       {
@@ -340,6 +367,32 @@ namespace Sales_system.ViewModels
       }
 
       return uiMessage;
+    }
+
+    private async void AddUserSA(string accessToken, string accessTokenExpires)
+    {
+
+      GetUserProfileRequest request = new GetUserProfileRequest();
+      request.SetClientId(StaticConstants.clientID)
+             .SetUserId(MetaDataManager.GetInstance().GetUserId())
+             .SetAccessToken(MetaDataManager.GetInstance().GetAccessToken());
+      IResponse response = await SamsungAccountManager.GetUserProfileData(request);
+
+      var profileResponse = response as GetUserProfileResponse;
+
+      DataBaseUsers dataBaseUsers = new DataBaseUsers();
+
+      await dataBaseUsers.CreateDataBase();
+
+      User user = new User()
+      {
+        Name = profileResponse.GetUserName(),
+        Email = profileResponse.GetEmailLoginID(),
+        AccessToken = accessToken,
+        AccessTokenExpires = accessTokenExpires,
+      };
+
+      await dataBaseUsers.AddUser(user);
     }
 
     String ProcessGetProfileResponse(IResponse response)
