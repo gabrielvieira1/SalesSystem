@@ -56,8 +56,6 @@ namespace Sales_system.Views
           sALoginViewModel.SignOutSACommand.Execute(null);
       else
         welcomeViewModel.SignOutCommand.Execute(null);
-
-      ((Frame)Window.Current.Content).Navigate(typeof(Login));
     }
 
     private void GetAccessToken_Click(object sender, RoutedEventArgs e)

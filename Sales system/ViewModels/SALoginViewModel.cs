@@ -238,8 +238,6 @@ namespace Sales_system.ViewModels
 
           GetAccessTokenSA();
 
-          ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
-
           uiMessage = $"ResponseType: {signInResponse.ResponseType}, Result: {result}, Code: {authCode}, AuthServerURL: {authServerUrl}, " +
               $"ApiServerURL: {apiServerUrl}, CodeExpiresIn: {codeExpiresIn}, Action: {action}, State: {sdkState}.";
         }
@@ -269,16 +267,14 @@ namespace Sales_system.ViewModels
       try
       {
         String responseState = SamsungAccountManager.Decrypt(signOutResponse.GetState(), state);
-        if (Utils.IsSuccessed(signOutResponse.GetResult(), responseState))
-          MetaDataManager.GetInstance().SetSignedInStatus(false);
-        StorageSA.clearData();
         string result = signOutResponse.GetResult();
         string action = signOutResponse.GetAction();
         string errorCode = signOutResponse.GetErrorCode();
         string errorMessage = signOutResponse.GetErrorMessage();
         string sdkState = SamsungAccountManager.Decrypt(signOutResponse.GetState(), state);
 
-        ((Frame)Window.Current.Content).Navigate(typeof(Login));
+        WelcomeViewModel welcomeViewModel = new WelcomeViewModel();
+        welcomeViewModel.SignOutCommand.Execute(null);
 
         uiMessage = $"ResponseType: {signOutResponse.ResponseType}, Result: {result}," +
             $"Action: {action}, State: {sdkState}, ErrorCode: {errorCode}, ErrorMessage: {errorMessage}.";
@@ -288,70 +284,6 @@ namespace Sales_system.ViewModels
         uiMessage = ex.Message;
       }
 
-      return uiMessage;
-    }
-
-    String ProcessChangePasswordResponse(ChangePasswordResponse changePasswordResponse)
-    {
-      String uiMessage;
-      try
-      {
-        String responseState = SamsungAccountManager.Decrypt(changePasswordResponse.GetState(), state);
-        if (!responseState.Equals(state))
-        {
-          uiMessage = "Man in middle attack";
-          return uiMessage;
-        }
-        string result = changePasswordResponse.GetResult();
-        string action = changePasswordResponse.GetAction();
-        string sdkState = SamsungAccountManager.Decrypt(changePasswordResponse.GetState(), state);
-        uiMessage = $"ResponseType: {changePasswordResponse.ResponseType}, Result: {result}," +
-            $"Action: {action}, State: {sdkState}.";
-      }
-      catch (Exception ex)
-      {
-        uiMessage = ex.Message;
-      }
-      return uiMessage;
-    }
-
-    String ProcessConfirmPasswordResponse(ConfirmPasswordResponse confirmPasswordResponse)
-    {
-      String uiMessage;
-      try
-      {
-        String responseState = SamsungAccountManager.Decrypt(confirmPasswordResponse.GetState(), state);
-        if (!responseState.Equals(state))
-        {
-          uiMessage = "Man in middle attack";
-          return uiMessage;
-        }
-        string result = confirmPasswordResponse.GetResult();
-        string action = confirmPasswordResponse.GetAction();
-        string sdkState = SamsungAccountManager.Decrypt(confirmPasswordResponse.GetState(), state);
-        uiMessage = $"ResponseType: {confirmPasswordResponse.ResponseType}, Result: {result}," +
-            $"Action: {action}, State: {sdkState}.";
-      }
-      catch (Exception ex)
-      {
-        uiMessage = ex.Message;
-      }
-      return uiMessage;
-    }
-
-    String ProcessOrganizerPasswordResponse(OrganizerPasswordResponse organizerPasswordResponse)
-    {
-      String uiMessage;
-      try
-      {
-        string result = organizerPasswordResponse.GetResult();
-        string action = organizerPasswordResponse.GetAction();
-        uiMessage = $"ResponseType: {organizerPasswordResponse.ResponseType}, Result: {result}, Action: {action}.";
-      }
-      catch (Exception ex)
-      {
-        uiMessage = ex.Message;
-      }
       return uiMessage;
     }
 
@@ -383,7 +315,6 @@ namespace Sales_system.ViewModels
 
     private async void AddUserSA(string accessToken, string accessTokenExpires)
     {
-
       GetUserProfileRequest request = new GetUserProfileRequest();
       request.SetClientId(StaticConstants.clientID)
              .SetUserId(MetaDataManager.GetInstance().GetUserId())
@@ -393,20 +324,29 @@ namespace Sales_system.ViewModels
       var profileResponse = response as GetUserProfileResponse;
 
       DataBaseUsers dataBaseUsers = new DataBaseUsers();
-
       await dataBaseUsers.CreateDataBase();
 
-      User user = new User()
-      {
-        Name = profileResponse.GetUserName(),
-        Email = profileResponse.GetEmailLoginID(),
-        AccessToken = accessToken,
-        AccessTokenExpires = accessTokenExpires,
-        Active = true
-      };
+      User existingUser = dataBaseUsers.GetUserByEmail(profileResponse.GetEmailLoginID());
 
-      await dataBaseUsers.AddUser(user);
+      if (existingUser != null)
+      {
+        dataBaseUsers.UpdateUserTokens(existingUser.Id, accessToken, accessTokenExpires);
+      }
+      else
+      {
+        User user = new User()
+        {
+          Name = profileResponse.GetUserName(),
+          Email = profileResponse.GetEmailLoginID(),
+          AccessToken = accessToken,
+          AccessTokenExpires = accessTokenExpires,
+          Active = true
+        };
+        await dataBaseUsers.AddUser(user);
+      }
       StorageSA.saveData();
+
+      ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
     }
 
     private void CheckIfUserIsLoggedIn()
@@ -435,6 +375,70 @@ namespace Sales_system.ViewModels
           ((Frame)Window.Current.Content).Navigate(typeof(Welcome), loggedUser);
         }
       }
+    }
+
+    String ProcessConfirmPasswordResponse(ConfirmPasswordResponse confirmPasswordResponse)
+    {
+      String uiMessage;
+      try
+      {
+        String responseState = SamsungAccountManager.Decrypt(confirmPasswordResponse.GetState(), state);
+        if (!responseState.Equals(state))
+        {
+          uiMessage = "Man in middle attack";
+          return uiMessage;
+        }
+        string result = confirmPasswordResponse.GetResult();
+        string action = confirmPasswordResponse.GetAction();
+        string sdkState = SamsungAccountManager.Decrypt(confirmPasswordResponse.GetState(), state);
+        uiMessage = $"ResponseType: {confirmPasswordResponse.ResponseType}, Result: {result}," +
+            $"Action: {action}, State: {sdkState}.";
+      }
+      catch (Exception ex)
+      {
+        uiMessage = ex.Message;
+      }
+      return uiMessage;
+    }
+
+    String ProcessChangePasswordResponse(ChangePasswordResponse changePasswordResponse)
+    {
+      String uiMessage;
+      try
+      {
+        String responseState = SamsungAccountManager.Decrypt(changePasswordResponse.GetState(), state);
+        if (!responseState.Equals(state))
+        {
+          uiMessage = "Man in middle attack";
+          return uiMessage;
+        }
+        string result = changePasswordResponse.GetResult();
+        string action = changePasswordResponse.GetAction();
+        string sdkState = SamsungAccountManager.Decrypt(changePasswordResponse.GetState(), state);
+        uiMessage = $"ResponseType: {changePasswordResponse.ResponseType}, Result: {result}," +
+            $"Action: {action}, State: {sdkState}.";
+      }
+      catch (Exception ex)
+      {
+        uiMessage = ex.Message;
+      }
+      return uiMessage;
+    }
+
+    String ProcessOrganizerPasswordResponse(OrganizerPasswordResponse organizerPasswordResponse)
+    {
+      String uiMessage;
+      try
+      {
+        string result = organizerPasswordResponse.GetResult();
+        string action = organizerPasswordResponse.GetAction();
+        uiMessage = $"ResponseType: {organizerPasswordResponse.ResponseType}, Result: {result}, Action: {action}.";
+      }
+      catch (Exception ex)
+      {
+        uiMessage = ex.Message;
+      }
+      return uiMessage;
     }
 
     String ProcessGetProfileResponse(IResponse response)

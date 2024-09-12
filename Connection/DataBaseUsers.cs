@@ -141,7 +141,7 @@ namespace Connection
                 user.Id = reader.GetInt32(0);
                 user.Name = reader.GetString(1);
                 user.Email = reader.GetString(2);
-                user.Password = reader.GetString(3);
+                user.Password = reader.IsDBNull(3) ? null : reader.GetString(3);
               }
               return user;
             }
@@ -174,7 +174,7 @@ namespace Connection
                 user.Id = reader.GetInt32(0);
                 user.Name = reader.GetString(1);
                 user.Email = reader.GetString(2);
-                user.Password = reader.GetString(3);
+                user.Password = reader.IsDBNull(3) ? null : reader.GetString(3);
               }
 
               return user;

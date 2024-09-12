@@ -77,7 +77,7 @@ namespace Sales_system.ViewModels
           MetaDataManager.GetInstance().SetAccessToken(user.AccessToken);
           MetaDataManager.GetInstance().SetSignedInStatus(true);
           StorageSA.saveData();
-          ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
+          ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
         }
       }
     }

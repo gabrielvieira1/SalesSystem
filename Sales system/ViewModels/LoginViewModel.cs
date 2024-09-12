@@ -54,27 +54,22 @@ namespace Sales_system.ViewModels
 
         await dataBaseUsers.CreateDataBase();
 
-        // Buscar o usuário pelo email
         User user = dataBaseUsers.GetUserByEmail(Email);
 
         if (user != null)
         {
-          // Validar a senha
           if (user.Password == Password)
           {
-            // Atualizar os tokens do usuário
             user.AccessToken = Guid.NewGuid().ToString();
             user.AccessTokenExpires = DateTime.UtcNow.AddDays(1).ToString("o");
 
             await Task.Run(() => dataBaseUsers.UpdateUserTokens(user.Id, user.AccessToken, user.AccessTokenExpires));
 
-            // Salvar o access token e marcar como logado
             MetaDataManager.GetInstance().SetAccessToken(user.AccessToken);
             MetaDataManager.GetInstance().SetSignedInStatus(true);
             StorageSA.saveData();
 
-            // Navegar para a página de boas-vindas
-            ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
+            ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
           }
           else
           {

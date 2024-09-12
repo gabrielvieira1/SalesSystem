@@ -45,6 +45,8 @@ namespace Sales_system.ViewModels
 
         DataBaseUsers dataBaseUsers = new DataBaseUsers();
         await dataBaseUsers.ClearAccessToken(user.Id);
+
+        ((Frame)Window.Current.Content).Navigate(typeof(Login));
       }      
     }
     public WelcomeViewModel() { }
