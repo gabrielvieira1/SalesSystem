@@ -21,25 +21,33 @@ namespace Sales_system.ViewModels
 {
   internal class WelcomeViewModel : UserModel
   {
-    private ICommand _command;
+    private ICommand _signOutCommand;
 
-    public ICommand IniciarCommand
+    public ICommand SignOutCommand
     {
       get
       {
-        return _command ?? (_command = new CommandHandler(async () =>
+        return _signOutCommand ?? (_signOutCommand = new CommandHandler(async () =>
         {
-          await IniciarAsync();
+          await SignOut();
         }));
       }
     }
 
-    private async Task IniciarAsync()
+    private async Task SignOut()
     {
-      ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+      var user = GetInfoUserLoggedIn();
 
+      if(user != null)
+      {
+        MetaDataManager.GetInstance().SetSignedInStatus(false);
+        StorageSA.clearData();
+
+        DataBaseUsers dataBaseUsers = new DataBaseUsers();
+        await dataBaseUsers.ClearAccessToken(user.Id);
+      }      
     }
-    public WelcomeViewModel(){}
+    public WelcomeViewModel() { }
 
     public User GetInfoUserLoggedIn()
     {
@@ -57,6 +65,13 @@ namespace Sales_system.ViewModels
         }
       }
       return null;
+    }
+
+    public Boolean LoggedWithSA()
+    {
+      var user = GetInfoUserLoggedIn();
+
+      return user.Password == null;
     }
   }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,19 +27,20 @@ namespace Sales_system.Views
   public sealed partial class Welcome : Page
   {
     private SALoginViewModel sALoginViewModel = null;
+    private WelcomeViewModel welcomeViewModel = null;
+    private LoginViewModel loginViewModel = null;
 
     public Welcome()
     {
       this.InitializeComponent();
       sALoginViewModel = new SALoginViewModel();
+      welcomeViewModel = new WelcomeViewModel();
     }
 
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
       base.OnNavigatedTo(e);
-
-      WelcomeViewModel welcomeViewModel = new WelcomeViewModel();
 
       var user = welcomeViewModel.GetInfoUserLoggedIn();
 
@@ -50,7 +52,12 @@ namespace Sales_system.Views
 
     private void SignOut_Click(object sender, RoutedEventArgs e)
     {
-      sALoginViewModel.SignOutSACommand.Execute(null);
+      if (welcomeViewModel.LoggedWithSA())
+          sALoginViewModel.SignOutSACommand.Execute(null);
+      else
+        welcomeViewModel.SignOutCommand.Execute(null);
+
+      ((Frame)Window.Current.Content).Navigate(typeof(Login));
     }
 
     private void GetAccessToken_Click(object sender, RoutedEventArgs e)

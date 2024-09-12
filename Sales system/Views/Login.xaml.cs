@@ -27,7 +27,7 @@ namespace Sales_system
     {
       InitializeComponent();
       Object[] campos = { Email, Password };
-      DataContext = new LoginViewModel();
+      DataContext = new LoginViewModel(campos);
     }
 
     private void LoginWithSA_Click(object sender, RoutedEventArgs e)

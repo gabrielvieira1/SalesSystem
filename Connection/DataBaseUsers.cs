@@ -26,59 +26,66 @@ namespace Connection
       }
     }
 
+    public void UpdateUserTokens(int userId, string newAccessToken, string newAccessTokenExpires)
+    {
+      var sql = "UPDATE Users SET AccessToken=@AccessToken, AccessTokenExpires=@AccessTokenExpires WHERE Id=@UserId";
+
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
+      {
+        conn.Open();
+        using (var command = new SqliteCommand(sql, conn))
+        {
+          command.Parameters.AddWithValue("@AccessToken", newAccessToken);
+          command.Parameters.AddWithValue("@AccessTokenExpires", newAccessTokenExpires);
+          command.Parameters.AddWithValue("@UserId", userId);
+          command.ExecuteNonQuery();
+        }
+      }
+    }
+
     public Boolean DoesUserExists(Models.User user)
     {
-      var sql = "SELECT * FROM Users WHERE email=@email";
+      var sql = "SELECT * FROM Users WHERE email=@Email";
 
-      var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
-      conn.Open();
-
-      var command = new SqliteCommand(sql, conn);
-      command.Parameters.AddWithValue("@email", user.Email);
-
-      var reader = command.ExecuteReader();
-
-      if (reader.HasRows)
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
       {
-        return true;
-      }
-      else
-      {
-        return false;
+        conn.Open();
+        using (var command = new SqliteCommand(sql, conn))
+        {
+          command.Parameters.AddWithValue("@Email", user.Email);
+          using (var reader = command.ExecuteReader())
+          {
+            return reader.HasRows;
+          }
+        }
       }
     }
 
     public int LoginUserExists(Models.User user)
     {
-      var sql = "SELECT * FROM Users WHERE email=@email AND password=@password";
+      var sql = "SELECT * FROM Users WHERE email=@Email AND password=@Password";
 
-      var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db");
-      conn.Open();
-
-      var command = new SqliteCommand(sql, conn);
-      command.Parameters.AddWithValue("@email", user.Email);
-      command.Parameters.AddWithValue("@password", user.Password);
-
-      var id = 0;
-
-      var reader = command.ExecuteReader();
-
-      if (reader.HasRows)
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
       {
-        while (reader.Read())
+        conn.Open();
+        using (var command = new SqliteCommand(sql, conn))
         {
-          id = reader.GetInt32(0);
+          command.Parameters.AddWithValue("@Email", user.Email);
+          command.Parameters.AddWithValue("@Password", user.Password);
+
+          using (var reader = command.ExecuteReader())
+          {
+            if (reader.HasRows)
+            {
+              while (reader.Read())
+              {
+                return reader.GetInt32(0);  // Retorna o ID do usuário
+              }
+            }
+            return -1;
+          }
         }
-
-        return id;
-
       }
-      else
-      {
-        return -1;
-      }
-
-
     }
 
     public Models.User GetUserById(int id)
@@ -88,17 +95,14 @@ namespace Connection
       using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
       {
         conn.Open();
-
         using (var command = new SqliteCommand(sql, conn))
         {
-          command.Parameters.AddWithValue("@id", id);
-
+          command.Parameters.AddWithValue("@Id", id);
           using (var reader = command.ExecuteReader())
           {
             if (reader.HasRows)
             {
               Models.User user = new Models.User();
-
               while (reader.Read())
               {
                 user.Id = reader.GetInt32(0);
@@ -109,19 +113,47 @@ namespace Connection
                 user.CreatedDateTime = reader.GetDateTime(5);
                 user.Active = reader.GetBoolean(6);
               }
-
               return user;
             }
           }
         }
       }
+      return null;
+    }
 
+    public Models.User GetUserByEmail(string email)
+    {
+      var sql = "SELECT id, name, email, password FROM Users WHERE email=@Email";
+
+      using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
+      {
+        conn.Open();
+        using (var command = new SqliteCommand(sql, conn))
+        {
+          command.Parameters.AddWithValue("@Email", email);
+          using (var reader = command.ExecuteReader())
+          {
+            if (reader.HasRows)
+            {
+              Models.User user = new Models.User();
+              while (reader.Read())
+              {
+                user.Id = reader.GetInt32(0);
+                user.Name = reader.GetString(1);
+                user.Email = reader.GetString(2);
+                user.Password = reader.GetString(3);
+              }
+              return user;
+            }
+          }
+        }
+      }
       return null;
     }
 
     public Models.User GetUserByAccessToken(string accessToken)
     {
-      var sql = "SELECT id, name, email FROM Users WHERE AccessToken=@accessToken";
+      var sql = "SELECT id, name, email, password FROM Users WHERE AccessToken=@accessToken";
 
       using (var conn = new SqliteConnection($"Data Source={ApplicationData.Current.LocalFolder.Path}/ByteBank.db"))
       {
@@ -142,6 +174,7 @@ namespace Connection
                 user.Id = reader.GetInt32(0);
                 user.Name = reader.GetString(1);
                 user.Email = reader.GetString(2);
+                user.Password = reader.GetString(3);
               }
 
               return user;

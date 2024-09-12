@@ -26,10 +26,10 @@ namespace Sales_system.ViewModels
     private Frame rootFrame = Window.Current.Content as Frame;
     private Connections _conn;
 
-    public LoginViewModel()
+    public LoginViewModel(object[] campos)
     {
-      //_textBoxEmail = (TextBox)campos[0];
-      //_textBoxPass = (PasswordBox)campos[1];
+      _textBoxEmail = (TextBox)campos[0];
+      _textBoxPass = (PasswordBox)campos[1];
       _conn = new Connections();
     }
 
@@ -54,28 +54,31 @@ namespace Sales_system.ViewModels
 
         await dataBaseUsers.CreateDataBase();
 
-        User user = new User()
-        {
-          Email = Email,
-          Password = Password
-        };
+        // Buscar o usuário pelo email
+        User user = dataBaseUsers.GetUserByEmail(Email);
 
-        if (dataBaseUsers.DoesUserExists(user))
+        if (user != null)
         {
-          int userId = dataBaseUsers.LoginUserExists(user);
-
-          if (userId > 0)
+          // Validar a senha
+          if (user.Password == Password)
           {
-            User loggedUser = dataBaseUsers.GetUserById(userId);
+            // Atualizar os tokens do usuário
+            user.AccessToken = Guid.NewGuid().ToString();
+            user.AccessTokenExpires = DateTime.UtcNow.AddDays(1).ToString("o");
 
-            GeneralMessage = "User logged in successfully.";
-            GeneralTextColor = "#FF00FF00";
+            await Task.Run(() => dataBaseUsers.UpdateUserTokens(user.Id, user.AccessToken, user.AccessTokenExpires));
 
-            ((Frame)Window.Current.Content).Navigate(typeof(Welcome), loggedUser);
+            // Salvar o access token e marcar como logado
+            MetaDataManager.GetInstance().SetAccessToken(user.AccessToken);
+            MetaDataManager.GetInstance().SetSignedInStatus(true);
+            StorageSA.saveData();
+
+            // Navegar para a página de boas-vindas
+            ((Frame)Window.Current.Content).Navigate(typeof(Welcome), user);
           }
           else
           {
-            GeneralMessage = "Invalid credentials. Please check your email and password.";
+            GeneralMessage = "Invalid credentials. Please check your password.";
             GeneralTextColor = "#FFC43131";
           }
         }
