@@ -134,6 +134,7 @@
     <Compile Include="Services\Helpers.cs" />
     <Compile Include="Util\Constants.cs" />
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\Security.cs" />
     <Compile Include="Util\StateGenerator.cs" />
     <Compile Include="Util\Utils.cs" />
     <Compile Include="ViewModels\SALoginViewModel.cs" />
@@ -247,6 +248,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next">
+      <Version>4.0.3</Version>
+    </PackageReference>
     <PackageReference Include="linq2db">
       <Version>5.2.2</Version>
     </PackageReference>

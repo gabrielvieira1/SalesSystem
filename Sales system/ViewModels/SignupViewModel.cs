@@ -12,6 +12,7 @@ using Sales_system.Library;
 using Models;
 using System.Diagnostics;
 using Sales_system.Views;
+using Sales_system.Util;
 
 namespace Sales_system.ViewModels
 {
@@ -49,7 +50,7 @@ namespace Sales_system.ViewModels
 
     private async Task SignUp()
     {
-      if (isValidCredentials(Email, Password))
+      if (isValidCredentials())
       {
         DataBaseUsers dataBaseUsers = new DataBaseUsers();
 
@@ -59,7 +60,7 @@ namespace Sales_system.ViewModels
         {
           Name = Name,
           Email = Email,
-          Password = Password,
+          Password = Security.HashPassword(Password),
           AccessToken = Guid.NewGuid().ToString(),
           AccessTokenExpires = DateTime.UtcNow.AddDays(1).ToString("o"),
           Active = true
@@ -80,62 +81,58 @@ namespace Sales_system.ViewModels
           ((Frame)Window.Current.Content).Navigate(typeof(Welcome));
         }
       }
+      else
+      {
+        GeneralMessage = "Please fix the highlighted errors and try again.";
+        GeneralTextColor = "#FFC43131";
+      }
     }
 
-    private bool isValidCredentials(string email, string password)
+    private bool isValidCredentials()
     {
-      if (string.IsNullOrEmpty(Name))
+      bool isValid = true;
+
+      if (!Security.InputIsValid(Name))
       {
-        NameMessage = "Ingresse el nombre";
-        _textBoxName.Focus(FocusState.Programmatic);
+        NameMessage = "Invalid Name";
+        isValid = false;
       }
       else
       {
-        if (string.IsNullOrEmpty(Email))
-        {
-          EmailMessage = "Ingresse el email";
-          _textBoxEmail.Focus(FocusState.Programmatic);
-        }
-        else
-        {
-          if (!TextBoxEvent.IsValidEmail(Email))
-          {
-            EmailMessage = "El email no es valido";
-            _textBoxEmail.Focus(FocusState.Programmatic);
-          }
-          else
-          {
-            if (string.IsNullOrEmpty(Password))
-            {
-              PasswordMessage = "Ingrese el password";
-              _textBoxPass.Focus(FocusState.Programmatic);
-            }
-            else
-            {
-              if (string.IsNullOrEmpty(ConfirmPassword))
-              {
-                ConfirmPasswordMessage = "Ingrese el password de confirmación";
-                _textBoxConfirmPass.Focus(FocusState.Programmatic);
-              }
-              else
-              {
-
-                if (string.Compare(Password, ConfirmPassword) != 0)
-                {
-                  ConfirmPasswordMessage = "El password de confirmación no son lo mismo. Ingrese otra vez";
-                  _textBoxConfirmPass.Focus(FocusState.Programmatic);
-                }
-                else
-                {
-                  return true;
-                }
-              }
-            }
-          }
-        }
+        NameMessage = string.Empty;
       }
 
-      return false;
+      if (!Security.EmailIsValid(Email))
+      {
+        EmailMessage = "Invalid Email";
+        isValid = false;
+      }
+      else
+      {
+        EmailMessage = string.Empty;
+      }
+
+      if (!Security.PasswordIsValid(Password))
+      {
+        PasswordMessage = "Invalid Password";
+        isValid = false;
+      }
+      else
+      {
+        PasswordMessage = string.Empty;
+      }
+
+      if (Password != ConfirmPassword)
+      {
+        ConfirmPasswordMessage = "Passwords do not match";
+        isValid = false;
+      }
+      else
+      {
+        ConfirmPasswordMessage = string.Empty;
+      }
+
+      return isValid;
     }
   }
 }

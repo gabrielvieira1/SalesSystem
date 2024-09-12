@@ -8,38 +8,50 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
-        <StackPanel Margin="240,50,240,0" >
-            <TextBlock Text="Sign up" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" />
-            <Image HorizontalAlignment="Stretch" Height="100" Margin="0,40,0,40" VerticalAlignment="Stretch" Source="/Assets/Fingerprint-bro.svg"/>
-            <StackPanel Margin="0,0,0,0" >
-                <TextBox Name="Name" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    InputScope="EmailSmtpAddress" PlaceholderText="Name" />
-                <TextBlock Foreground="#FFC43131" Text="{Binding NameMessage, Mode=TwoWay}"
-                    TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontStyle="Normal"/>
-            </StackPanel>
-            <StackPanel Margin="0,0,0,0" >
-                <TextBox Name="Email" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  InputScope="EmailSmtpAddress" PlaceholderText="Email" />
-                <TextBlock Foreground="#FFC43131" Text="{Binding EmailMessage, Mode=TwoWay}"
-                    TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontStyle="Normal"/>
-            </StackPanel>
-            <StackPanel Margin="0,0,0,0" >
-                <PasswordBox Name="Password" Password="{Binding Password, Mode=TwoWay}" PlaceholderText="Password" />
-                <TextBlock Foreground="#FFC43131" Text="{Binding PasswordMessage, Mode=TwoWay}"
-                    TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontStyle="Normal"/>
-            </StackPanel>
-            <StackPanel Margin="0,0,0,0" >
-                <PasswordBox Name="ConfirmPassword" Password="{Binding ConfirmPassword, Mode=TwoWay}" PlaceholderText="Confirm Password" />
-                <TextBlock Foreground="#FFC43131" Text="{Binding ConfirmPasswordMessage, Mode=TwoWay}"
-                TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontStyle="Normal"/>
-            </StackPanel>
-            <Button Content="Sign Up" Command="{Binding SignUpCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Content="Sign-In Page" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="Signin_Click"/>
+  <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
+    <StackPanel Margin="240,50,240,0">
+      <TextBlock Text="Sign up" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" />
+      <Image HorizontalAlignment="Stretch" Height="100" Margin="0,40,0,40" VerticalAlignment="Stretch" Source="/Assets/Fingerprint-bro.svg"/>
 
-            <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
-            <TextBlock Text="@BIEL" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Stretch" />
-            
-        </StackPanel>
-    </Grid>
+      <!-- Nome -->
+      <StackPanel Margin="0,0,0,0">
+        <TextBox Name="Name" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Name" />
+        <TextBlock Foreground="#FFC43131" Text="{Binding NameMessage}" 
+                           TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+      </StackPanel>
+
+      <!-- Email -->
+      <StackPanel Margin="0,0,0,0">
+        <TextBox Name="Email" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Email" />
+        <TextBlock Foreground="#FFC43131" Text="{Binding EmailMessage}" 
+                           TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+      </StackPanel>
+
+      <!-- Senha -->
+      <StackPanel Margin="0,0,0,0">
+        <PasswordBox Name="Password" Password="{Binding Password, Mode=TwoWay}" PlaceholderText="Password" />
+        <TextBlock Foreground="#FFC43131" Text="{Binding PasswordMessage}" 
+                           TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+      </StackPanel>
+
+      <!-- Confirmar Senha -->
+      <StackPanel Margin="0,0,0,0">
+        <PasswordBox Name="ConfirmPassword" Password="{Binding ConfirmPassword, Mode=TwoWay}" PlaceholderText="Confirm Password" />
+        <TextBlock Foreground="#FFC43131" Text="{Binding ConfirmPasswordMessage}" 
+                           TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+      </StackPanel>
+
+      <!-- Botão Sign Up -->
+      <Button Content="Sign Up" Command="{Binding SignUpCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+      <!-- Botão Sign In -->
+      <Button Content="Sign-In" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="Signin_Click"/>
+
+      <!-- Mensagem geral -->
+      <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage}" 
+                       TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
+    </StackPanel>
+  </Grid>
 </Page>

@@ -15,6 +15,7 @@ using Sales_system.Views;
 using Sales_system.Services;
 using static LinqToDB.Common.Configuration;
 using Windows.Foundation.Collections;
+using Sales_system.Util;
 
 namespace Sales_system.ViewModels
 {
@@ -48,7 +49,7 @@ namespace Sales_system.ViewModels
 
     private async Task SignIn()
     {
-      if (isValidCredentials(Email, Password))
+      if (isValidCredentials())
       {
         DataBaseUsers dataBaseUsers = new DataBaseUsers();
 
@@ -58,7 +59,7 @@ namespace Sales_system.ViewModels
 
         if (user != null)
         {
-          if (user.Password == Password)
+          if (Security.VerifyHashedPassword(Password, user.Password))
           {
             user.AccessToken = Guid.NewGuid().ToString();
             user.AccessTokenExpires = DateTime.UtcNow.AddDays(1).ToString("o");
@@ -83,37 +84,38 @@ namespace Sales_system.ViewModels
           GeneralTextColor = "#FFC43131";
         }
       }
+      else
+      {
+        GeneralMessage = "Please correct the highlighted errors.";
+        GeneralTextColor = "#FFC43131";
+      }
     }
 
-    private bool isValidCredentials(string email, string password)
+    private bool isValidCredentials()
     {
-      if (string.IsNullOrEmpty(email))
+      bool isValid = true;
+
+      if (!Security.EmailIsValid(Email))
       {
-        EmailMessage = "Please enter your email.";
-        _textBoxEmail.Focus(FocusState.Programmatic);
+        EmailMessage = "Invalid Email";
+        isValid = false;
       }
       else
       {
-        if (TextBoxEvent.IsValidEmail(email))
-        {
-          if (string.IsNullOrEmpty(password))
-          {
-            PasswordMessage = "Please enter your password.";
-            _textBoxPass.Focus(FocusState.Programmatic);
-          }
-          else
-          {
-            return true;
-          }
-        }
-        else
-        {
-          EmailMessage = "The email entered is not valid.";
-          _textBoxEmail.Focus(FocusState.Programmatic);
-        }
+        EmailMessage = string.Empty;
       }
 
-      return false;
+      if (!Security.PasswordIsValid(Password))
+      {
+        PasswordMessage = "Invalid Password";
+        isValid = false;
+      }
+      else
+      {
+        PasswordMessage = string.Empty;
+      }
+
+      return isValid;
     }
   }
 }
