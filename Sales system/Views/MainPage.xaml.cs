@@ -1,4 +1,5 @@
-﻿using Sales_system.ViewModels;
+﻿using Sales_system.Controls;
+using Sales_system.ViewModels;
 using Sales_system.Views;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -30,18 +32,6 @@ namespace Sales_system
     public MainPage()
     {
       this.InitializeComponent();
-      SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
-    }
-
-    private void MainPage_BackRequested(object sender, BackRequestedEventArgs e)
-    {
-      if (InnerFrame.BackStack.Any())
-      {
-        e.Handled = true;
-        InnerFrame.GoBack();
-       /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
-        SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-      }
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -55,27 +45,6 @@ namespace Sales_system
       {
         InnerFrame.Navigate(typeof(Welcome));
       }
-      /*this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
-      SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-    }
-
-    private void GoBackButton_Click(object sender, RoutedEventArgs e)
-    {
-      InnerFrame.GoBack();
-     /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
-      SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-    }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-      InnerFrame.Navigate(typeof(Signup));
-     /* this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
-      SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-    }
-
-    private void Button_Click_2(object sender, RoutedEventArgs e)
-    {
-      InnerFrame.Navigate(typeof(Login));
       /*this.GoBackButton.IsEnabled = InnerFrame.BackStack.Any();*/
       SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = InnerFrame.BackStack.Any() ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
     }

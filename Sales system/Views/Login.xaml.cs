@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
+using Sales_system.Views;
+using Windows.UI.Core;
 
 
 namespace Sales_system
@@ -35,6 +38,11 @@ namespace Sales_system
       InitializeComponent();
       SALoginViewModel salogin = new SALoginViewModel();
       salogin.SignInSACommand.Execute(null);
+    }
+
+    private void Signup_Click(object sender, RoutedEventArgs e)
+    {
+      Frame.Navigate(typeof(Signup));
     }
   }
 }

@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    
     <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
+        <!-- NavigationView para gerenciar a navegação entre as páginas -->
         <StackPanel Margin="240,50,240,0" >
             <TextBlock Text="Login" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" />
             <Image HorizontalAlignment="Stretch" Height="100" Margin="0,40,0,40" VerticalAlignment="Stretch" Source="/Assets/Fingerprint-bro.svg"/>
@@ -25,6 +26,7 @@
             </StackPanel>
             <Button Content="Login" Command="{Binding SignInCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Button Content="SA Sign-in" Command="{Binding SignInSACommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="LoginWithSA_Click"/>
+            <Button Content="Sign-up Page" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="Signup_Click"/>
             
             <TextBlock Text="{Binding Message, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>
             <TextBlock Foreground="{Binding GeneralTextColor}" Text="{Binding GeneralMessage, Mode=TwoWay}" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Stretch"/>

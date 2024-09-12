@@ -30,5 +30,10 @@ namespace Sales_system
       Object[] campos = { Name, Email, Password, ConfirmPassword };
       DataContext = new SignupViewModel(campos);
     }
+
+    private void Signin_Click(object sender, RoutedEventArgs e)
+    {
+      Frame.Navigate(typeof(Login));
+    }
   }
 }

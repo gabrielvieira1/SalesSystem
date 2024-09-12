@@ -4,18 +4,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sales_system.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:controls="using:Sales_system.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
-    <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
-        <StackPanel Margin="240,50,240,0">
-            <TextBlock x:Name="WelcomeTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" Margin="0,25,0,50"/>
-            <Button Content="Sign-Out" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SignOut_Click"/>
-            <Button Content="Get access token" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessToken_Click"/>
-            <Button Content="Get profile data" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetProfileData_Click"/>
-            <Button Content="Get access local" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessLocal_Click" />
 
-        </StackPanel>
+
+    <Grid HorizontalAlignment="Center" Width="936" VerticalAlignment="Stretch">
+        <Grid>
+            <StackPanel Margin="240,50,240,0">
+                <TextBlock x:Name="WelcomeTextBlock" TextWrapping="Wrap" HorizontalAlignment="Center" FontSize="36" FontWeight="Bold" Margin="0,25,0,50"/>
+                <Button Content="Sign-Out" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SignOut_Click"/>
+                <Button Content="Get access token" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessToken_Click"/>
+                <Button Content="Get profile data" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetProfileData_Click"/>
+                <Button Content="Get access local" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,25,0,0" Click="GetAccessLocal_Click"/>
+            </StackPanel>
+        </Grid>
+        <controls:LoadingControl x:Name="LoadingControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <!-- <controls:ConfirmActionControl x:Name="ConfirmActionControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/> -->
+        <Grid>
+            <ContentDialog x:Name="ConfirmationDialog"
+                   Title="Confirmar Ação"
+                   PrimaryButtonText="Confirmar"
+                   CloseButtonText="Cancelar">
+                <TextBlock Text="Tem certeza de que deseja realizar esta ação?" />
+            </ContentDialog>
+        </Grid>
     </Grid>
+
 </Page>

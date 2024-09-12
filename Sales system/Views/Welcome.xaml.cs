@@ -1,4 +1,5 @@
 ﻿using Models;
+using Sales_system.Controls;
 using Sales_system.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -37,10 +39,21 @@ namespace Sales_system.Views
       welcomeViewModel = new WelcomeViewModel();
     }
 
-
-    protected override void OnNavigatedTo(NavigationEventArgs e)
+    private async Task ShowLoadingAndNavigateAsync(Type pageType)
     {
+      LoadingControl.Show();
+      await Task.Delay(2000);
+      LoadingControl.Hide();
+
+      /* Frame.Navigate(pageType);*/
+    }
+
+    protected async override void OnNavigatedTo(NavigationEventArgs e)
+    {
+      await ShowLoadingAndNavigateAsync(typeof(Welcome));
+
       base.OnNavigatedTo(e);
+
 
       var user = welcomeViewModel.GetInfoUserLoggedIn();
 
@@ -50,12 +63,23 @@ namespace Sales_system.Views
       }
     }
 
-    private void SignOut_Click(object sender, RoutedEventArgs e)
+    private async void SignOut_Click(object sender, RoutedEventArgs e)
     {
-      if (welcomeViewModel.LoggedWithSA())
+      ContentDialogResult result = await ConfirmationDialog.ShowAsync();
+
+      if (result == ContentDialogResult.Primary)
+      {
+        // O usuário confirmou a ação
+        if (welcomeViewModel.LoggedWithSA())
           sALoginViewModel.SignOutSACommand.Execute(null);
-      else
-        welcomeViewModel.SignOutCommand.Execute(null);
+        else
+          welcomeViewModel.SignOutCommand.Execute(null);
+      }
+      /*else
+      {
+        // O usuário cancelou a ação
+        CancelUserAction();
+      }*/
     }
 
     private void GetAccessToken_Click(object sender, RoutedEventArgs e)
